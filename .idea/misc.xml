@@ -14,4 +14,7 @@
     </option>
   </component>
   <component name="PlatformIOWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="WokwiProjectSettings">
+    <option name="watchFirmware" value="false" />
+  </component>
 </project>
