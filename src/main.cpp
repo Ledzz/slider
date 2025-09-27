@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <stepper.h>
 
-
 Stepper stepper;
 
 void setup() {
@@ -14,6 +13,7 @@ void setup() {
     delay(1000);
 
     stepper.begin();
+    stepper.startLoop();
 
 }
 
