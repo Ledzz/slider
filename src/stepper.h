@@ -1,7 +1,3 @@
-//
-// Created by ledzz on 9 Sep 2025.
-//
-
 enum Status {
     Idle,
     Calibrating,
@@ -15,7 +11,7 @@ constexpr int DIR_PIN = 6;
 constexpr int EN_PIN = 4;
 constexpr int ENDSTOP_LEFT_PIN = 2;
 constexpr int ENDSTOP_RIGHT_PIN = 1;
-constexpr int PULSE_WIDTH_US = 50;
+constexpr int PULSE_WIDTH_US = 20;
 constexpr int MIN_SPEED = 50;
 constexpr int MAX_SPEED = 20000;
 
