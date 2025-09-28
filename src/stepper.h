@@ -122,17 +122,55 @@ public:
         digitalWrite(DIR_PIN, target > 0 ? HIGH : LOW);
     };
 
-    void startLoop() {
-        int targetSpeed = 20000;
 
+    static void loopTaskWrapper(void *pvParameters) {
+        Stepper *instance = (Stepper *) pvParameters;
+        instance->loopTask();
+    }
+
+    int targetSpeed = 0;
+
+    void loopTask() {
         while (1) {
+            xSemaphoreTake(endstopSemaphore, 0);
+
             setSpeedInstant(targetSpeed);
 
             xSemaphoreTake(endstopSemaphore, portMAX_DELAY);
+
+            xSemaphoreTake(endstopSemaphore, 0);
 
             setSpeedInstant(-targetSpeed);
 
             xSemaphoreTake(endstopSemaphore, portMAX_DELAY);
         }
+    }
+
+    TaskHandle_t loopTaskHandle = NULL;
+
+    void setSpeedAndStartLoop(int newTargetSpeed) {
+        if (loopTaskHandle) {
+            vTaskDelete(loopTaskHandle);
+            loopTaskHandle = NULL;
+        }
+
+        targetSpeed = newTargetSpeed;
+
+        xTaskCreate(
+            loopTaskWrapper,
+            "loopTask",
+            2048,
+            this,
+            1,
+            &loopTaskHandle
+        );
     };
+
+    void stop() {
+        if (loopTaskHandle) {
+            vTaskDelete(loopTaskHandle);
+            loopTaskHandle = NULL;
+        }
+        setSpeedInstant(0);
+    }
 };
